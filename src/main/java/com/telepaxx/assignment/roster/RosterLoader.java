@@ -4,6 +4,7 @@ import com.telepaxx.assignment.model.PatientRecord;
 import io.quarkus.runtime.StartupEvent;
 import jakarta.enterprise.event.Observes;
 import org.dcm4che3.data.Attributes;
+import org.dcm4che3.data.Tag;
 import org.dcm4che3.io.DicomInputStream;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
@@ -68,12 +69,19 @@ public class RosterLoader {
         try {
             DicomInputStream dis = new DicomInputStream(file.toFile());
             Attributes metadata = dis.readDataset();
-            LOG.infof("metadata %s", metadata.toString());
+            String patientId = metadata.getString(Tag.PatientID);
+            String[] name = metadata.getString(Tag.PatientName).split("\\^");
+            String firstName = getValueFromName(name, 0);
+            String lastName = getValueFromName(name, 1);
             dis.close();
-            return new PatientRecord("id-1", "lastName", "firstName", file.toAbsolutePath().toString());
+            return new PatientRecord(patientId, lastName, firstName, file.toAbsolutePath().toString());
         } catch (Exception e) {
             LOG.errorf(e, "Failed to read from DICOM file %s", file.toAbsolutePath());
             return null;
         }
+    }
+
+    private String getValueFromName(String[] name, int index) {
+        return name.length > index && !name[index].isEmpty() ? name[index] : null;
     }
 }
