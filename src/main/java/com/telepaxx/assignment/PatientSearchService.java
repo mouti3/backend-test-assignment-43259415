@@ -3,6 +3,7 @@ package com.telepaxx.assignment;
 import com.telepaxx.assignment.dto.PageResponse;
 import com.telepaxx.assignment.dto.PatientResponse;
 import com.telepaxx.assignment.dto.PatientSearchCriteria;
+import com.telepaxx.assignment.roster.RosterLoader;
 import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.List;
@@ -19,9 +20,17 @@ import java.util.List;
 @ApplicationScoped
 public class PatientSearchService {
 
-    // TODO: inject RosterLoader and implement search
+
+    private final RosterLoader rosterLoader;
+
+    public PatientSearchService(RosterLoader rosterLoader) {
+        this.rosterLoader = rosterLoader;
+    }
+
     public PageResponse<PatientResponse> search(PatientSearchCriteria criteria) {
-        return new PageResponse<>(List.of(), 0);
+        List<PatientResponse> data = rosterLoader.getAllPatientRecords().stream().map(PatientResponse::from).toList();
+        int total = data.size();
+        return new PageResponse<>(data, total);
     }
 
 }

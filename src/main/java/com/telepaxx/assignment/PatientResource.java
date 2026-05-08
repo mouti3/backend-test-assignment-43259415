@@ -40,6 +40,4 @@ public class PatientResource {
         return patientSearchService.search(criteria);
     }
 
-
-
 }
