@@ -20,16 +20,10 @@ dependencies {
     implementation 'org.dcm4che:dcm4che-core:5.29.1'
     implementation 'commons-io:commons-io:2.21.0'
 
-    implementation 'io.quarkus:quarkus-hibernate-validator'
-
     testImplementation 'io.quarkus:quarkus-junit5'
     testImplementation 'io.quarkus:quarkus-junit5-mockito'
     testImplementation 'io.rest-assured:rest-assured'
     testImplementation 'org.assertj:assertj-core:3.27.7'
-}
-
-test {
-    useJUnitPlatform()
 }
 
 java {

@@ -66,14 +66,13 @@ public class RosterLoader {
     }
 
     private PatientRecord setPatientRecord(Path file) {
-        try {
-            DicomInputStream dis = new DicomInputStream(file.toFile());
+        try (DicomInputStream dis = new DicomInputStream(file.toFile())) {
             Attributes metadata = dis.readDataset();
             String patientId = metadata.getString(Tag.PatientID);
-            String[] name = metadata.getString(Tag.PatientName).split("\\^");
-            String firstName = getValueFromName(name, 0);
-            String lastName = getValueFromName(name, 1);
-            dis.close();
+            String patientNameMetaData = metadata.getString(Tag.PatientName);
+            String[] name = patientNameMetaData == null ? new String[0] : patientNameMetaData.split("\\^");
+            String lastName = getValueFromName(name, 0);
+            String firstName = getValueFromName(name, 1);
             return new PatientRecord(patientId, lastName, firstName, file.toAbsolutePath().toString());
         } catch (Exception e) {
             LOG.errorf(e, "Failed to read from DICOM file %s", file.toAbsolutePath());

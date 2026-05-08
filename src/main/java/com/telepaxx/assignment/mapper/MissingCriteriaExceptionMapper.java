@@ -18,7 +18,7 @@ public class MissingCriteriaExceptionMapper implements ExceptionMapper<MissingCr
     @Override
     public Response toResponse(MissingCriteriaException exception) {
         ErrorResponse body = ErrorResponse.of(
-                400,
+                Response.Status.BAD_REQUEST.getStatusCode(),
                 "Bad Request",
                 exception.getMessage(),
                 uriInfo.getPath()

@@ -18,11 +18,11 @@ public class NoPatientsMatchExceptionMapper implements ExceptionMapper<NoPatient
     @Override
     public Response toResponse(NoPatientsMatchException exception) {
         ErrorResponse body = ErrorResponse.of(
-                400,
-                "Bad Request",
+                404,
+                "Not Found",
                 exception.getMessage(),
                 uriInfo.getPath()
                 );
-        return Response.status(Response.Status.BAD_REQUEST).entity(body).type(MediaType.APPLICATION_JSON_TYPE).build();
+        return Response.status(Response.Status.NOT_FOUND).entity(body).type(MediaType.APPLICATION_JSON_TYPE).build();
     }
 }

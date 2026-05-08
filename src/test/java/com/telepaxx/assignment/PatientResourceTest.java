@@ -62,7 +62,7 @@ public class PatientResourceTest {
         given().queryParam("lastName", "John")
                 .when().get(API_PATH)
                 .then()
-                .statusCode(Response.Status.BAD_REQUEST.getStatusCode())
+                .statusCode(Response.Status.NOT_FOUND.getStatusCode())
                 .contentType(ContentType.JSON)
                 .body("message", equalTo(NO_PATIENTS_MATCH));
     }
