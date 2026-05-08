@@ -3,6 +3,8 @@ package com.telepaxx.assignment;
 import com.telepaxx.assignment.dto.PageResponse;
 import com.telepaxx.assignment.dto.PatientResponse;
 import com.telepaxx.assignment.dto.PatientSearchCriteria;
+import com.telepaxx.assignment.exception.MissingCriteriaException;
+import com.telepaxx.assignment.exception.NoPatientsMatchException;
 import com.telepaxx.assignment.model.PatientRecord;
 import com.telepaxx.assignment.roster.RosterLoader;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -32,8 +34,7 @@ public class PatientSearchService {
 
     public PageResponse<PatientResponse> search(PatientSearchCriteria criteria) {
         if (!isValid(criteria.patientId()) && !isValid(criteria.lastName())) {
-            LOG.error("at Least one Criteria");
-            return new PageResponse<>(List.of(), 0);
+            throw new MissingCriteriaException("Provide a least: PatientId or PatientLastName");
         }
         List<PatientRecord> allPatientRecords = rosterLoader.getAllPatientRecords();
         int total = allPatientRecords.size();
@@ -43,8 +44,7 @@ public class PatientSearchService {
                 .filter(patient -> matchesValue(patient.lastName(), criteria.lastName()))
                 .map(PatientResponse::from).toList();
         if (data.isEmpty()) {
-            LOG.error("No Patient Found");
-            return new PageResponse<>(List.of(), total);
+            throw new NoPatientsMatchException(criteria.patientId(), criteria.lastName());
         }
         return new PageResponse<>(data, total);
     }
