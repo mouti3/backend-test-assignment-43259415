@@ -1,6 +1,8 @@
 package com.telepaxx.assignment;
 
-import com.telepaxx.assignment.model.PatientRecord;
+import com.telepaxx.assignment.dto.PageResponse;
+import com.telepaxx.assignment.dto.PatientResponse;
+import com.telepaxx.assignment.dto.PatientSearchCriteria;
 import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.List;
@@ -18,5 +20,8 @@ import java.util.List;
 public class PatientSearchService {
 
     // TODO: inject RosterLoader and implement search
+    public PageResponse<PatientResponse> search(PatientSearchCriteria criteria) {
+        return new PageResponse<>(List.of(), 0);
+    }
 
 }

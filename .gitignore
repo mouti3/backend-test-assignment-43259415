@@ -8,3 +8,4 @@ tools/
 uv.lock
 pyproject.toml
 REVIEWER*
+.idea
